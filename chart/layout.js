@@ -206,7 +206,7 @@ exports.drawCircle = function (ctx, x, y, radius, skip = 1) {
     if (skip == 0) {
         skip = 1
     }
-    
+
     for (i = 0; i < 360; i += skip) {
         this.setPixel(ctx, x + Math.cos(i * deg2Rad) * radius, y + Math.sin(i * deg2Rad) * radius)
     }
@@ -468,15 +468,15 @@ exports.basicMoonPath = function (r, reverse, flipx) {
 
     var direction = reverse ? "0" : "1"
     var arc = flipx ? "0" : "1"
-    var moonPath = "M 5 0 A 5,5 0 0," + arc + " 5,10"
-    moonPath += "M 5 -1 A 5.5,5.5 0 0,0 5,11"
-    moonPath += "M 5,11 A 5.5,5.5 0 0,0 5,-1"
+    var moonPath = "M 5 0 A 5,5 0 0," + arc + " 5,10 "
+    moonPath += "M 5 -1 A 5.5,5.5 0 0,0 5,11 "
+    moonPath += "M 5,11 A 5.5,5.5 0 0,0 5,-1 "
 
     if (flipx) {
-        moonPath += "M 5,0 A " + r.toFixed(0) + "," + r.toFixed(0) + " 0 0," + direction + " 5,10"
+        moonPath += "M 5,0 A " + r.toFixed(0) + "," + r.toFixed(0) + " 0 0," + direction + " 5,10 "
 
     } else {
-        moonPath += "M 5,0 A " + r.toFixed(0) + "," + r.toFixed(0) + " 0 0," + direction + " 5,10"
+        moonPath += "M 5,0 A " + r.toFixed(0) + "," + r.toFixed(0) + " 0 0," + direction + " 5,10 "
 
     }
 
@@ -484,26 +484,26 @@ exports.basicMoonPath = function (r, reverse, flipx) {
 
 }
 
-exports.createMoonPath = function (chart, i) {
+exports.createMoonPath = function (i) {
     var phase = i / 90
 
     var pInt = Math.floor(phase)
     var pFrac = phase - pInt;
 
     if (pInt == 0) {
-        r = Math.max(Math.min(5 / ((1 - pFrac) + 0.001), 500), -500)
-        return chart.path(basicMoonPath(r, true, true)).fill("none")
+        var r = Math.max(Math.min(5 / ((1 - pFrac) + 0.001), 500), -500)
+        return this.basicMoonPath(r, true, true)
     }
     if (pInt == 1) {
-        r = Math.max(Math.min(5 / (pFrac + 0.001), 500), -500)
-        return chart.path(basicMoonPath(r, false, true)).fill("none")
+        var r = Math.max(Math.min(5 / (pFrac + 0.001), 500), -500)
+        return this.basicMoonPath(r, false, true)
     }
     if (pInt == 2) {
-        r = Math.max(Math.min(5 / ((1 - pFrac) + 0.001), 500), -500)
-        return chart.path(basicMoonPath(r, true, false)).fill("none")
+        var r = Math.max(Math.min(5 / ((1 - pFrac) + 0.001), 500), -500)
+        return this.basicMoonPath(r, true, false)
     }
     if (pInt == 3) {
-        r = Math.max(Math.min(5 / (pFrac + 0.001), 500), -500)
-        return chart.path(basicMoonPath(r, false, false)).fill("none")
+        var r = Math.max(Math.min(5 / (pFrac + 0.001), 500), -500)
+        return this.basicMoonPath(r, false, false)
     }
 }

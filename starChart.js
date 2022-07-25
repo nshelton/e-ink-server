@@ -54,7 +54,7 @@ exports.drawZodiac = function (ctx) {
     return zodiacAngles
 }
 
-exports.drawStars = function(ctx) {
+exports.drawStars = function (ctx) {
     const stars_json = JSON.parse(fs.readFileSync("./chart/stars.6.json"))
 
     for (var i = 0; i < stars_json.features.length; i++) {
@@ -82,7 +82,7 @@ exports.render = function (ctx) {
     _Time = new Date()
 
     const zodiacAngles = this.drawZodiac(ctx)
-    
+
     ctx = Layout.printRings(ctx, zodiacAngles, 100, 100, 1)
     const glyphRadius = 120
 
@@ -92,7 +92,7 @@ exports.render = function (ctx) {
     }
 
     this.drawStars(ctx)
-   
+
     // ------------- PLANETS --------------------------
     var planetLocations = {}
 
@@ -116,28 +116,13 @@ exports.render = function (ctx) {
         var planetLocation = planetLocations[name]
 
         var angle = Common.getAngle(location)
-        // if ( name == "Moon") {
-        // //  0 = new moon // 90 = first quarter // 180 = full moon // 270 = third quarter
-        //     var phase = Astronomy.MoonPhase(_Time);
-
-        //     createMoonPath(chart, phase).move(location[0],location[1]).rotate(angle * rad2deg ).scale(3).stroke({ color: PLANET_COLOR, width:0.3})
-        //     // chart.circle(40).cx(location[0]).cy(location[1]).stroke(PLANET_COLOR).fill("none")
-        //     var moonText = fromRadial(angle+ 0.04, 600)
-        //     var pct = 100 * (1 - (Math.abs(phase - 180) / 180))
-        //     var waxing = phase < 180 ? "+" : "-"
-        //     // printTextAngle(chart, pct.toFixed(0) + "# " + waxing, moonText[0], moonText[1], 0.6)
-
-
-        // } else {
 
         // toto: use this https://www.wfonts.com/font/hamburgsymbols#google_vignette
-        
+
         Layout.drawGlyph(ctx, Layout.symbolFromPlanetMap[i], location[0], location[1], angle)
 
-        // chart.text( getPlanetInfo([planetNames[i]])).cx().cy(pos3[1]).scale(1).rotate(angle * rad2deg ).fill(TEXT_COLOR)
         var textPos = Common.setDistance(location, Common.getDistance(location) + 30);
 
-        // printTextAngle(chart, getPlanetInfo([planetNames[i]]), textPos[0], textPos[1])
 
     }
 
@@ -175,7 +160,7 @@ exports.render = function (ctx) {
 
 
     // graw horizon rings
-    ringWidths= [0,1,5,10,20,30,50]
+    ringWidths = [0, 1, 5, 10, 20, 30, 50]
     for (var j = 0; j < 2; j++) {
         var horizonPoints = []
 
@@ -184,9 +169,9 @@ exports.render = function (ctx) {
             coord = transfromHorizToScreen(horiz)
             horizonPoints.push(coord)
         }
-        dashstyle =  [1,1]
+        dashstyle = [1, 1]
         dashstyle = []
-        ctx = Layout.drawLineFromPoints(ctx, horizonPoints, "#222",dashstyle)
+        ctx = Layout.drawLineFromPoints(ctx, horizonPoints, "#222", dashstyle)
     }
 
     northpole = Common.EllipticFromCelestialLonLat(0, 90)
@@ -199,6 +184,87 @@ exports.render = function (ctx) {
 
     ctx = Layout.drawCircle(ctx, Layout.center[0], Layout.center[1], 45)
 
+
+    function DrawMoon(x, y, phase, dim) {
+        ctx.save()
+        ctx.translate(x + dim / 2, y + dim / 2)
+        ctx.fillStyle = "black";
+        ctx.beginPath();
+        ctx.arc(0, 0, dim / 2, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.beginPath();
+        if (phase < 1 || phase > 359) {
+            ctx.beginPath();
+            ctx.arc(0, 0, dim / 2, 0, 2 * Math.PI);
+            ctx.fill();
+
+        } else if (phase > 0.01 && phase < 90) {
+            ctx.beginPath();
+            ctx.arc(0, 0, dim / 2, Math.PI * 0.5, Math.PI * 1.5);
+            ctx.fill();
+            ctx.scale((phase - 90) / 90, 1)
+            ctx.beginPath();
+            ctx.arc(0, 0, dim / 2, 0, Math.PI * 2);
+            ctx.fill();
+
+        } else if (phase == 90) {
+            ctx.beginPath();
+            ctx.arc(0, 0, dim / 2, Math.PI * 0.5, Math.PI * 1.5);
+            ctx.fill();
+
+        } else if (phase > 90 && phase < 180) {
+            ctx.beginPath();
+            ctx.arc(0, 0, dim / 2, Math.PI * 0.5, Math.PI * 1.5);
+            ctx.fill();
+            ctx.scale((phase - 90) / 90, 1)
+            ctx.beginPath();
+            ctx.fillStyle = "white";
+            ctx.arc(0, 0, dim / 2, 0, Math.PI * 2);
+            ctx.fill();
+        } else if (phase == 180) {
+
+        } else if (phase > 180 && phase < 270) {
+            ctx.beginPath();
+            ctx.arc(0, 0, dim / 2, Math.PI * 1.5, Math.PI * 0.5);
+            ctx.fill();
+            ctx.scale((90 - (phase - 180)) / 90, 1)
+            ctx.beginPath();
+            ctx.fillStyle = "white";
+            ctx.arc(0, 0, dim / 2, 0, Math.PI * 2);
+            ctx.fill();
+
+        } else if (phase == 270) {
+            ctx.beginPath();
+            ctx.arc(0, 0, dim / 2, Math.PI * 1.5, Math.PI * 0.5);
+            ctx.fill();
+
+        } else if (phase > 270 && phase < 360) {
+            ctx.beginPath();
+            ctx.arc(0, 0, dim / 2, Math.PI * 1.5, Math.PI * 0.5);
+            ctx.fill();
+            ctx.scale(((phase - 270)) / 90, 1)
+            ctx.beginPath();
+            ctx.arc(0, 0, dim / 2, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        ctx.restore()
+
+    }
+
+    // ------------- Moon --------------------------
+    //  0 = new moon // 90 = first quarter // 180 = full moon // 270 = third quarter
+    var phase = Astronomy.MoonPhase(_Time);
+
+    DrawMoon(10, 250, phase, 50)
+
+    // ctx.strokeRect(0, 0, 100, 100)
+
+    var pct = 100 * (1 - (Math.abs(phase - 180) / 180))
+    var waxing = phase < 180 ? "+" : "-"
+    ctx.font = '15px arcadeclassic'
+
+    ctx.fillText(waxing + pct.toFixed() + "%", 10, 330)
 
     return ctx
 };
