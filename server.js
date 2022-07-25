@@ -6,7 +6,7 @@ let fetch = require('node-fetch');
 const { createCanvas, registerFont } = require('canvas');
 const { setMaxListeners } = require('events');
 let starChart = require("./starChart.js")
-
+let secrets = require("./secrets.js")
 const port = 1337;
 
 app.listen(port, () => {
@@ -110,7 +110,7 @@ async function createDrawing() {
 
 
   if (getWeather) {
-    let weatherurl = "https://api.openweathermap.org/data/2.5/weather?lat=34.07431&lon=-118.26100&appid=d36f29e56c5a2a7336a3cf3168d63be2&units=imperial"
+    let weatherurl = secrets.WeatherURL
     lastWeatherUpdate = Date.now()
     currentWeather = await fetch(weatherurl).then(res => res.json())
     console.log(currentWeather)
