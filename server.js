@@ -41,27 +41,27 @@ function compressArray(array) {
  lastWeatherUpdate = 0
 
 currentWeather = {
-  coord: { lon: -118.26, lat: 34.07 },
-  weather: [ { id: 800, main: 'Clear', description: 'clear sky', icon: '01d' } ],
+  coord: { lon: -118.261, lat: 34.0743 },
+  weather: [ { id: 721, main: 'Haze', description: 'haze', icon: '50d' } ],
   base: 'stations',
   main: {
-    temp: 81.5,
-    feels_like: 84.24,
-    temp_min: 66.47,
-    temp_max: 99.28,
-    pressure: 1011,
-    humidity: 63
+    temp: 69.39,
+    feels_like: 69.75,
+    temp_min: 63.03,
+    temp_max: 76.8,
+    pressure: 1014,
+    humidity: 79
   },
-  visibility: 10000,
-  wind: { speed: 13.8, deg: 260, gust: 23.02 },
-  clouds: { all: 0 },
-  dt: 1658702425,
+  visibility: 8047,
+  wind: { speed: 5.75, deg: 160 },
+  clouds: { all: 100 },
+  dt: 1658851684,
   sys: {
     type: 2,
-    id: 2002814,
+    id: 2009067,
     country: 'US',
-    sunrise: 1658667515,
-    sunset: 1658718011
+    sunrise: 1658840400,
+    sunset: 1658890731
   },
   timezone: -25200,
   id: 5368361,
@@ -70,17 +70,24 @@ currentWeather = {
 }
 
 getWeather = false
-autoReload = true
+autoReload = false
 
 function getTimeString(date) {
-  let min = date.getMinutes()
-  min = min < 10 ? "0" + min : min
-  let hour = date.getHours() % 12
-  hour = hour < 10 ? "0" + hour : hour
-  let seconds = date.getSeconds()
-  seconds = seconds < 10 ? "0" + seconds : seconds
-  // return hour + ":" + min + ":" + seconds;
-  return hour + ":" + min + " " + (date.getHours() < 12 ? "a" : "p");
+  const options = {
+    hour: 'numeric', minute: 'numeric',
+    timeZone: 'America/Los_Angeles'
+  };
+
+  return date.toLocaleTimeString('en-US', options);
+
+  // let min = date.getMinutes()
+  // min = min < 10 ? "0" + min : min
+  // let hour = date.getHours() % 12
+  // hour = hour < 10 ? "0" + hour : hour
+  // let seconds = date.getSeconds()
+  // seconds = seconds < 10 ? "0" + seconds : seconds
+  // // return hour + ":" + min + ":" + seconds;
+  // return hour + ":" + min + " " + (date.getHours() < 12 ? "a" : "p");
 }
 
 async function createDrawing() {
@@ -132,9 +139,9 @@ async function createDrawing() {
   ctx.fillText(Math.round(currentWeather.main.humidity) + " % ", 10, yOffs)
   ctx.fillText(Math.round(currentWeather.main.pressure/10) + " kPa", 55, yOffs)
   yOffs += 30
-  ctx.fillText(getTimeString(new Date(currentWeather.sys.sunrise)) + "", 10, yOffs)
+  ctx.fillText(getTimeString(new Date(currentWeather.sys.sunrise * 1000)) + "", 10, yOffs)
   yOffs += lineheight
-  ctx.fillText(getTimeString(new Date(currentWeather.sys.sunset)) + "", 10, yOffs)
+  ctx.fillText(getTimeString(new Date(currentWeather.sys.sunset * 1000)) + "", 10, yOffs)
   yOffs += lineheight
   ctx.font = '15px arcadeclassic'
 
