@@ -1,0 +1,27 @@
+{
+  "name": "e-ink-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nshelton/e-ink-server.git"
+  },
+  "author": "sheltron",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nshelton/e-ink-server/issues"
+  },
+  "homepage": "https://github.com/nshelton/e-ink-server#readme",
+  "dependencies": {
+    "canvas": "^2.9.3",
+    "canvas-5-polyfill": "^0.1.5",
+    "canvas-dither": "^1.0.1",
+    "express": "^4.18.1",
+    "node-fetch": "^2.6.1"
+  }
+}
