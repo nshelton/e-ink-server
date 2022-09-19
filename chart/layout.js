@@ -33,12 +33,12 @@ exports.layoutPlanetLabels = function (positions, distance, c) {
         for (var i = 0; i < this.planetNames.length; i++) {
             for (var j = 0; j < this.planetNames.length; j++) {
                 var dist = Math.abs(angles[this.planetNames[i]] - angles[this.planetNames[j]])
-                if (i != j && dist < 0.1) {
+                if (i != j && dist < 0.15) {
 
                     var ai = angles[this.planetNames[i]];
                     var aj = angles[this.planetNames[j]];
 
-                    var delta = Math.sign(ai - aj) * 0.01;
+                    var delta = Math.sign(ai - aj) * 0.005;
 
                     angles[this.planetNames[i]] += delta;
                     angles[this.planetNames[j]] -= delta;

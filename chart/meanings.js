@@ -1,4 +1,4 @@
-function getHouseInfo(i) {
+exports.getHouseInfo = function(i) {
     var houses =  {
         1 : "self",
         2 : "posessions",
@@ -16,7 +16,7 @@ function getHouseInfo(i) {
     return houses[i]
 }
 
-function getHouseInfo2(i) {
+exports.getHouseInfo2 = function(i) {
     var houses =  {
         1 : "self",
         2 : "posessions",
@@ -34,7 +34,7 @@ function getHouseInfo2(i) {
     return houses[i]
 }
 
-function getPlanetInfo(name) {
+exports.getPlanetInfo = function(name) {
     var planetMeaning = {
         'Sun' : "self",
         'Moon' : "emotion",
@@ -50,7 +50,7 @@ function getPlanetInfo(name) {
     return planetMeaning[name]
 }
 
-function getZodiacInfo(i) {
+exports.getZodiacInfo = function(i) {
     var zodiac =  {
         1 : "bravery",
         2 : "drive",
@@ -67,3 +67,4 @@ function getZodiacInfo(i) {
     }
     return zodiac[i]
 }
+

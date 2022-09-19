@@ -3,8 +3,10 @@ const { fstat } = require('fs');
 const Astronomy = require('./chart/astronomy.js');
 const Layout = require('./chart/layout.js');
 const Common = require('./chart/common.js');
+const Meanings = require('./chart/meanings.js');
 const Glyphs = require('./chart/glyphs.js');
 const fs = require('fs');
+const { createContext } = require('vm');
 
 const QUAD_COLOR = "#ff0"
 const STAR_COLOR = "#0ff"
@@ -14,6 +16,7 @@ const TEXT_COLOR = "#f0f"
 
 
 registerFont('HamburgSymbols.ttf', { family: 'symbol' })
+registerFont('FFFFORWA.TTF', { family: 'ffff' })
 
 let maxMag = 6
 
@@ -89,6 +92,15 @@ exports.render = function (ctx) {
     for (let i = 0; i < zodiacAngles.length; i++) {
         var p0 = Common.fromRadial(zodiacAngles[i], glyphRadius)
         Layout.drawGlyph(ctx, Layout.symbolFromZodiacMap[i], p0[0], p0[1], zodiacAngles[i])
+        
+        var p0 = Common.fromRadial(zodiacAngles[i], 100)
+        ctx.save()
+        ctx.translate(p0[0], p0[1])
+        ctx.rotate(zodiacAngles[i] + Math.PI)
+        ctx.font = '13px FFFFORWA'
+        width = ctx.measureText(Meanings.getZodiacInfo(i+1))
+        ctx.fillText(Meanings.getZodiacInfo(i+1),  0, 0)
+        ctx.restore()
     }
 
     this.drawStars(ctx)
@@ -118,12 +130,38 @@ exports.render = function (ctx) {
         var angle = Common.getAngle(location)
 
         // toto: use this https://www.wfonts.com/font/hamburgsymbols#google_vignette
-
         Layout.drawGlyph(ctx, Layout.symbolFromPlanetMap[i], location[0], location[1], angle)
 
+        ctx.save()
+        var p0 = Common.fromRadial(angle + 0.08, 200)
+   
+        ctx.translate(Math.round(p0[0]), Math.round(p0[1]))
+        ctx.rotate(angle)
+        ctx.font = '18px FFFFORWA'
+        ctx.fillText(Meanings.getPlanetInfo(name), 0, 0)
+        ctx.restore()
+
         var textPos = Common.setDistance(location, Common.getDistance(location) + 30);
+    }
+    
+    for (let body of ['Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto']) {
+        ctx.save()
+        ctx.lineWidth = "5 px"
+        var newDate = new Date(_Time) 
+        newDate.setDate(newDate.getDate() - 30);
+        lastpos = [0,0]
+        for(var i = 0; i < 60; i ++) {
+            newDate.setDate(newDate.getDate() + 1);
+            let equ_2000 = Astronomy.Equator(body, newDate, _Observer, false, true);
+            let equ_ofdate = Astronomy.Equator(body, newDate, _Observer, true, true);
+            coord = Common.EllipticFromCelestialHour(equ_ofdate.ra, equ_ofdate.dec)
 
-
+            if (i > 0)
+                Layout.drawLine(ctx, lastpos[0], lastpos[1], coord[0], coord[1])
+            
+            lastpos = coord
+        }
+        ctx.restore()
     }
 
     function transfromHorizToScreen(horiz) {

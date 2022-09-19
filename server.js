@@ -70,7 +70,7 @@ currentWeather = {
   cod: 200
 }
 
-getWeather = true
+getWeather = false
 autoReload = false
 
 function getTimeString(date) {
@@ -104,18 +104,14 @@ async function createDrawing() {
 
   ctx.fillStyle = 'black'
   ctx.strokeStyle = 'black'
-
   ctx.lineWidth = 4
-
 
   let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
   let days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
   // let date_ob = new Date(1634149314984 + (Date.now() - 1656189614984) * 50000);
   let date_ob = new Date();
   
-
   let datestr = months[date_ob.getMonth()] + " " + date_ob.getDate() + " " + date_ob.getFullYear() 
-
 
   if (getWeather) {
     let weatherurl = secrets.WeatherURL
@@ -129,7 +125,7 @@ async function createDrawing() {
   yOffs += 40
   ctx.fillText(getTimeString(date_ob), 10, yOffs)
   yOffs += 40
-  ctx.fillText(Math.round(currentWeather.main.temp), 45,yOffs)
+  ctx.fillText(Math.round(currentWeather.main.temp), 45, yOffs)
   ctx.strokeRect(80, yOffs-25, 8, 8) // degree sign
   ctx.font = '15px arcadeclassic'
   ctx.fillText(Math.round(currentWeather.main.temp_min), 10, yOffs)
