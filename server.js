@@ -70,7 +70,7 @@ currentWeather = {
   cod: 200
 }
 
-getWeather = false
+getWeather = true
 autoReload = false
 
 function getTimeString(date) {
